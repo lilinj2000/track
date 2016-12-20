@@ -8,6 +8,7 @@
 #include "Config.hh"
 #include "cata/TraderService.hh"
 #include "soil/STimer.hh"
+#include "json/json.hh"
 
 namespace track {
 
@@ -29,6 +30,11 @@ protected:
   void queryExchange();
 
   void queryInstrument();
+
+  void sqlString(const std::string& name,
+                 json::Value& data,
+                 std::string& create_sql,
+                 std::string& insert_sql);
 
   void wait() {
     cond_->wait(1000);
