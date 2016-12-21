@@ -8,8 +8,6 @@ track_SOURCES = \
 	Server.cc \
 	Main.cc 
 
-
-
 track_CPPFLAGS = -I$(top_srcdir) \
 		$(BOOST_CPPFLAGS) \
 		$(SOIL_CPPFLAGS) \

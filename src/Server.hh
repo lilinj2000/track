@@ -47,8 +47,12 @@ protected:
                  std::string& create_sql,
                  std::string& insert_sql);
 
-  void wait() {
-    cond_->wait(1000);
+  void wait(int mill_second = -1) {
+    cond_->wait(mill_second);
+  }
+
+  void notify() {
+    cond_->notifyAll();
   }
 
  private:

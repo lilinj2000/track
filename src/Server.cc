@@ -65,7 +65,11 @@ void Server::onRspMessage(const std::string& msg) {
       }
     }
 
+    if (data["is_last"].GetBool()) {
+      notify();
+    }
   }
+
 }
 
 void Server::onRtnMessage(const std::string& msg) {
@@ -77,83 +81,89 @@ void Server::onRtnMessage(const std::string& msg) {
 void Server::go() {
   TRACK_TRACE <<"Server::go()";
 
+  wait(1000);
   queryExchange();
+  wait();
 
+  wait(1000);
   queryInstrument();
+  wait();
 
+  wait(1000);
   queryInvestor();
+  wait();
 
+  wait(1000);
   queryAccount();
+  wait();
 
+  wait(1000);
   queryTradingCode();
+  wait();
 
+  wait(1000);
   queryOrder();
+  wait();
 
+  wait(1000);
   queryTrade();
+  wait();
 
+  wait(1000);
   queryPosition();
+  wait();
 }
 
 void Server::queryExchange() {
   TRACK_TRACE <<"Server::queryExchange()";
 
-  wait();
   trader_service_->queryExchange("");
 }
 
 void Server::queryInstrument() {
   TRACK_TRACE <<"Server::queryInstrument()";
 
-  wait();
   trader_service_->queryInstrument("", "", "", "");
 }
 
 void Server::queryInvestor() {
   TRACK_TRACE <<"Server::queryInvestor()";
 
-  wait();
   trader_service_->queryInvestor();
 }
 
 void Server::queryAccount() {
   TRACK_TRACE <<"Server::queryAccount()";
 
-  wait();
   trader_service_->queryAccount("");
 }
 
 void Server::queryTradingCode() {
   TRACK_TRACE <<"Server::queryTradingCode()";
 
-  wait();
   trader_service_->queryTradingCode("", "", cata::CIDT_Speculation);
 
-  wait();
-  trader_service_->queryTradingCode("", "", cata::CIDT_Arbitrage);
+  // trader_service_->queryTradingCode("", "", cata::CIDT_Arbitrage);
 
-  wait();
-  trader_service_->queryTradingCode("", "", cata::CIDT_Hedge);
+  // trader_service_->queryTradingCode("", "", cata::CIDT_Hedge);
 
 }
 
 void Server::queryOrder() {
   TRACK_TRACE <<"Server::queryOrder()";
 
-  wait();
   trader_service_->queryOrder("", "", "", "", "");
 }
 
 void Server::queryTrade() {
   TRACK_TRACE <<"Server::queryTrade()";
 
-  wait();
   trader_service_->queryTrade("", "", "", "", "");
 }
 
 void Server::queryPosition() {
   TRACK_TRACE <<"Server::queryPosition()";
 
-  wait();
   trader_service_->queryPosition("");
 }
 
