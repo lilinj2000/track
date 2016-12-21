@@ -101,7 +101,8 @@ am_track_OBJECTS = track-Config.$(OBJEXT) track-Server.$(OBJEXT) \
 track_OBJECTS = $(am_track_OBJECTS)
 am__DEPENDENCIES_1 =
 track_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -260,6 +261,9 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
+CPPDB_CPPFLAGS = @CPPDB_CPPFLAGS@
+CPPDB_HOME = @CPPDB_HOME@
+CPPDB_LIBADD = @CPPDB_LIBADD@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
@@ -392,13 +396,15 @@ track_CPPFLAGS = -I$(top_srcdir) \
 		$(SOIL_CPPFLAGS) \
 		$(CATA_CPPFLAGS) \
 		$(RAPIDJSON_CPPFLAGS) \
-		$(JSON_CPPFLAGS)
+		$(JSON_CPPFLAGS) \
+		$(CPPDB_CPPFLAGS)
 
 track_LDADD = \
 	$(BOOST_LIBADD) \
 	$(SOIL_LIBADD) \
 	$(CATA_TRADER_LIBADD) \
-	$(JSON_LIBADD)
+	$(JSON_LIBADD) \
+	$(CPPDB_LIBADD)
 
 track_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 

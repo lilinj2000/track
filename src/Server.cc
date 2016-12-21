@@ -14,6 +14,8 @@ Server::Server(int argc, char* argv[]) {
 
   config_.reset(new Config(argc, argv));
 
+  db_.reset(new cppdb::session(config_->options()->connection_string));
+
   trader_service_.reset(cata::TraderService::createService(config_->cataTraderOptions(), this));
 
   go();
@@ -51,8 +53,15 @@ void Server::onRspMessage(const std::string& msg) {
         std::string create_sql;
         std::string insert_sql;
         sqlString(t_name, f_data, create_sql, insert_sql);
-        TRACK_DEBUG <<"create sql: " <<create_sql;
-        TRACK_DEBUG <<"insert sql: " <<insert_sql;
+        // TRACK_DEBUG <<"create sql: " <<create_sql;
+        // TRACK_DEBUG <<"insert sql: " <<insert_sql;
+
+        try {
+          (*db_) <<create_sql <<cppdb::exec;
+          (*db_) <<insert_sql <<cppdb::exec;
+        } catch (std::exception const &e) {
+          TRACK_ERROR <<e.what();
+        }
       }
     }
 
@@ -70,9 +79,9 @@ void Server::go() {
 
   queryInvestor();
 
-  // queryExchange();
+  queryExchange();
 
-  // queryInstrument();
+  queryInstrument();
 }
 
 void Server::queryInvestor() {

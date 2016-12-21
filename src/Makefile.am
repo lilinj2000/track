@@ -15,13 +15,15 @@ track_CPPFLAGS = -I$(top_srcdir) \
 		$(SOIL_CPPFLAGS) \
 		$(CATA_CPPFLAGS) \
 		$(RAPIDJSON_CPPFLAGS) \
-		$(JSON_CPPFLAGS)
+		$(JSON_CPPFLAGS) \
+		$(CPPDB_CPPFLAGS)
 
 track_LDADD = \
 	$(BOOST_LIBADD) \
 	$(SOIL_LIBADD) \
 	$(CATA_TRADER_LIBADD) \
-	$(JSON_LIBADD)
+	$(JSON_LIBADD) \
+	$(CPPDB_LIBADD)
 
 
 track_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread

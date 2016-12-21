@@ -69,6 +69,20 @@ AC_SUBST([RAPIDJSON_HOME])
 RAPIDJSON_CPPFLAGS="-I$RAPIDJSON_HOME/include"
 AC_SUBST(RAPIDJSON_CPPFLAGS)
 
+dnl cppdb
+CPPDB_HOME=$home_3rd/cppdb
+AC_ARG_WITH([cppdb], 
+    [AS_HELP_STRING([--with-cppdb],
+        [home path of the cppdb, defaults to $CPPDB_HOME])],
+    [CPPDB_HOME="$withval"],
+    [CPPDB_HOME="$CPPDB_HOME"])
+AC_SUBST([CPPDB_HOME])
+
+CPPDB_CPPFLAGS="-I$CPPDB_HOME/include"
+CPPDB_LIBADD="-L$CPPDB_HOME/lib -lcppdb"
+AC_SUBST(CPPDB_CPPFLAGS)
+AC_SUBST(CPPDB_LIBADD)
+
 dnl soil lib
 AC_ARG_WITH([soil],
     [AS_HELP_STRING([--with-soil],

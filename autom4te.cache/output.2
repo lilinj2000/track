@@ -646,6 +646,9 @@ CATA_HOME
 SOIL_LIBADD
 SOIL_CPPFLAGS
 SOIL_HOME
+CPPDB_LIBADD
+CPPDB_CPPFLAGS
+CPPDB_HOME
 RAPIDJSON_CPPFLAGS
 RAPIDJSON_HOME
 BOOST_LIBADD
@@ -789,6 +792,7 @@ with_sysroot
 enable_libtool_lock
 with_boost
 with_rapidjson
+with_cppdb
 with_soil
 with_cata
 with_json
@@ -1447,6 +1451,7 @@ Optional Packages:
   --with-boost            home path of the boost, defaults to @S|@home_3rd/boost
   --with-rapidjson        home path of the rapidjson, defaults to
                           @S|@RAPIDJSON_HOME
+  --with-cppdb            home path of the cppdb, defaults to @S|@CPPDB_HOME
   --with-soil             home path of the soil, defaults to @S|@home_libs/soil
   --with-cata             home path of the cata, defaults to @S|@CATA_HOME
   --with-json             home path of the json, defaults to @S|@home_libs/json
@@ -15341,6 +15346,22 @@ fi
 
 
 RAPIDJSON_CPPFLAGS="-I$RAPIDJSON_HOME/include"
+
+
+CPPDB_HOME=$home_3rd/cppdb
+
+@%:@ Check whether --with-cppdb was given.
+if test "${with_cppdb+set}" = set; then :
+  withval=$with_cppdb; CPPDB_HOME="$withval"
+else
+  CPPDB_HOME="$CPPDB_HOME"
+fi
+
+
+
+CPPDB_CPPFLAGS="-I$CPPDB_HOME/include"
+CPPDB_LIBADD="-L$CPPDB_HOME/lib -lcppdb"
+
 
 
 

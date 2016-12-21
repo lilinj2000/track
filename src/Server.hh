@@ -9,6 +9,7 @@
 #include "cata/TraderService.hh"
 #include "soil/STimer.hh"
 #include "json/json.hh"
+#include "cppdb/frontend.h"
 
 namespace track {
 
@@ -46,6 +47,8 @@ protected:
   std::unique_ptr<cata::TraderService> trader_service_;
 
   std::unique_ptr<soil::STimer> cond_;
+
+  std::unique_ptr<cppdb::session> db_;
 };
 
 };  // namespace track
