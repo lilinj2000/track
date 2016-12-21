@@ -26,11 +26,21 @@ class Server : public cata::ServiceCallback {
 protected:
   void go();
   
-  void queryInvestor();
-
   void queryExchange();
 
   void queryInstrument();
+
+  void queryInvestor();
+
+  void queryAccount();
+
+  void queryTradingCode();
+
+  void queryOrder();
+
+  void queryTrade();
+
+  void queryPosition();
 
   void sqlString(const std::string& name,
                  json::Value& data,

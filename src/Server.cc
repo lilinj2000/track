@@ -77,18 +77,21 @@ void Server::onRtnMessage(const std::string& msg) {
 void Server::go() {
   TRACK_TRACE <<"Server::go()";
 
-  queryInvestor();
-
   queryExchange();
 
   queryInstrument();
-}
 
-void Server::queryInvestor() {
-  TRACK_TRACE <<"Server::queryInvestor()";
+  queryInvestor();
 
-  wait();
-  trader_service_->queryInvestor();
+  queryAccount();
+
+  queryTradingCode();
+
+  queryOrder();
+
+  queryTrade();
+
+  queryPosition();
 }
 
 void Server::queryExchange() {
@@ -103,6 +106,55 @@ void Server::queryInstrument() {
 
   wait();
   trader_service_->queryInstrument("", "", "", "");
+}
+
+void Server::queryInvestor() {
+  TRACK_TRACE <<"Server::queryInvestor()";
+
+  wait();
+  trader_service_->queryInvestor();
+}
+
+void Server::queryAccount() {
+  TRACK_TRACE <<"Server::queryAccount()";
+
+  wait();
+  trader_service_->queryAccount("");
+}
+
+void Server::queryTradingCode() {
+  TRACK_TRACE <<"Server::queryTradingCode()";
+
+  wait();
+  trader_service_->queryTradingCode("", "", cata::CIDT_Speculation);
+
+  wait();
+  trader_service_->queryTradingCode("", "", cata::CIDT_Arbitrage);
+
+  wait();
+  trader_service_->queryTradingCode("", "", cata::CIDT_Hedge);
+
+}
+
+void Server::queryOrder() {
+  TRACK_TRACE <<"Server::queryOrder()";
+
+  wait();
+  trader_service_->queryOrder("", "", "", "", "");
+}
+
+void Server::queryTrade() {
+  TRACK_TRACE <<"Server::queryTrade()";
+
+  wait();
+  trader_service_->queryTrade("", "", "", "", "");
+}
+
+void Server::queryPosition() {
+  TRACK_TRACE <<"Server::queryPosition()";
+
+  wait();
+  trader_service_->queryPosition("");
 }
 
 void Server::sqlString(const std::string& name,
