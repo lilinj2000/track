@@ -30,7 +30,7 @@ void Server::onRspMessage(const std::string& msg) {
 
   TRACK_INFO <<msg;
   json::Document doc;
-  doc.Parse(msg.data());
+  json::fromString(msg, &doc);
 
   auto itr = doc.MemberBegin();
   std::string key = itr->name.GetString();
