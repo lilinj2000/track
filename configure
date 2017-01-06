@@ -636,6 +636,9 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+ZOD_LIBADD
+ZOD_CPPFLAGS
+ZOD_HOME
 JSON_LIBADD
 JSON_CPPFLAGS
 JSON_HOME
@@ -646,9 +649,6 @@ CATA_HOME
 SOIL_LIBADD
 SOIL_CPPFLAGS
 SOIL_HOME
-CPPDB_LIBADD
-CPPDB_CPPFLAGS
-CPPDB_HOME
 RAPIDJSON_CPPFLAGS
 RAPIDJSON_HOME
 BOOST_LIBADD
@@ -792,10 +792,10 @@ with_sysroot
 enable_libtool_lock
 with_boost
 with_rapidjson
-with_cppdb
 with_soil
 with_cata
 with_json
+with_zod
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1451,10 +1451,10 @@ Optional Packages:
   --with-boost            home path of the boost, defaults to $home_3rd/boost
   --with-rapidjson        home path of the rapidjson, defaults to
                           $RAPIDJSON_HOME
-  --with-cppdb            home path of the cppdb, defaults to $CPPDB_HOME
   --with-soil             home path of the soil, defaults to $home_libs/soil
   --with-cata             home path of the cata, defaults to $CATA_HOME
   --with-json             home path of the json, defaults to $home_libs/json
+  --with-zod              home path of the zod, defaults to $ZOD_HOME
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -15348,22 +15348,6 @@ fi
 RAPIDJSON_CPPFLAGS="-I$RAPIDJSON_HOME/include"
 
 
-CPPDB_HOME=$home_3rd/cppdb
-
-# Check whether --with-cppdb was given.
-if test "${with_cppdb+set}" = set; then :
-  withval=$with_cppdb; CPPDB_HOME="$withval"
-else
-  CPPDB_HOME="$CPPDB_HOME"
-fi
-
-
-
-CPPDB_CPPFLAGS="-I$CPPDB_HOME/include"
-CPPDB_LIBADD="-L$CPPDB_HOME/lib -lcppdb"
-
-
-
 
 # Check whether --with-soil was given.
 if test "${with_soil+set}" = set; then :
@@ -15411,7 +15395,23 @@ JSON_LIBADD="$JSON_HOME/lib/libjson.la"
 
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile"
+ZOD_HOME=$home_libs/zod
+
+# Check whether --with-zod was given.
+if test "${with_zod+set}" = set; then :
+  withval=$with_zod; ZOD_HOME="$withval"
+else
+  ZOD_HOME="$ZOD_HOME"
+fi
+
+
+
+ZOD_CPPFLAGS="-I$ZOD_HOME/include"
+ZOD_LIBADD="$ZOD_HOME/lib/libzod.la"
+
+
+
+ac_config_files="$ac_config_files Makefile inf/Makefile service/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -16536,7 +16536,8 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
+    "inf/Makefile") CONFIG_FILES="$CONFIG_FILES inf/Makefile" ;;
+    "service/Makefile") CONFIG_FILES="$CONFIG_FILES service/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

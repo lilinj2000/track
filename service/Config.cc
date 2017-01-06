@@ -16,8 +16,10 @@ Options::Options():
   namespace po = boost::program_options;
 
   config_options_.add_options()
-      ("track.connection_string", po::value<std::string>(&connection_string),
-       "db connection string")
+      ("track.pull_addr", po::value<std::string>(&pull_addr),
+       "pull address")
+      ("track.pub_addr", po::value<std::string>(&pub_addr),
+       "pub address")
       ("track.log_cfg", po::value<std::string>(&log_cfg),
        "log config file");
 

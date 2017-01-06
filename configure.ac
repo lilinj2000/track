@@ -69,20 +69,6 @@ AC_SUBST([RAPIDJSON_HOME])
 RAPIDJSON_CPPFLAGS="-I$RAPIDJSON_HOME/include"
 AC_SUBST(RAPIDJSON_CPPFLAGS)
 
-dnl cppdb
-CPPDB_HOME=$home_3rd/cppdb
-AC_ARG_WITH([cppdb], 
-    [AS_HELP_STRING([--with-cppdb],
-        [home path of the cppdb, defaults to $CPPDB_HOME])],
-    [CPPDB_HOME="$withval"],
-    [CPPDB_HOME="$CPPDB_HOME"])
-AC_SUBST([CPPDB_HOME])
-
-CPPDB_CPPFLAGS="-I$CPPDB_HOME/include"
-CPPDB_LIBADD="-L$CPPDB_HOME/lib -lcppdb"
-AC_SUBST(CPPDB_CPPFLAGS)
-AC_SUBST(CPPDB_LIBADD)
-
 dnl soil lib
 AC_ARG_WITH([soil],
     [AS_HELP_STRING([--with-soil],
@@ -124,9 +110,24 @@ JSON_LIBADD="$JSON_HOME/lib/libjson.la"
 AC_SUBST(JSON_CPPFLAGS)
 AC_SUBST(JSON_LIBADD)
 
+dnl zod lib
+ZOD_HOME=$home_libs/zod
+AC_ARG_WITH([zod], 
+    [AS_HELP_STRING([--with-zod],
+        [home path of the zod, defaults to $ZOD_HOME])],
+    [ZOD_HOME="$withval"],
+    [ZOD_HOME="$ZOD_HOME"])
+AC_SUBST([ZOD_HOME])
+
+ZOD_CPPFLAGS="-I$ZOD_HOME/include"
+ZOD_LIBADD="$ZOD_HOME/lib/libzod.la"
+AC_SUBST(ZOD_CPPFLAGS)
+AC_SUBST(ZOD_LIBADD)
+
 AC_OUTPUT([
 	Makefile
-	src/Makefile])
+	inf/Makefile
+	service/Makefile])
 
 
 

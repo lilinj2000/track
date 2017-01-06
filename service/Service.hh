@@ -1,34 +1,38 @@
 // Copyright (c) 2010
 // All rights reserved.
 
-#ifndef TRACK_SERVER_HH
-#define TRACK_SERVER_HH
+#ifndef TRACK_SERVICE_HH
+#define TRACK_SERVICE_HH
 
 #include <string>
 #include "Config.hh"
 #include "cata/TraderService.hh"
 #include "soil/STimer.hh"
+#include "zod/PullService.hh"
+#include "zod/PubService.hh"
 #include "json/json.hh"
-#include "cppdb/frontend.h"
 
 namespace track {
 
-class Server : public cata::ServiceCallback {
+class Service : public zod::MsgCallback,
+                public cata::ServiceCallback {
  public:
-  Server(int argc, char* argv[]);
+  Service(int argc, char* argv[]);
 
-  virtual ~Server();
+  virtual ~Service();
 
+  // from zod::MsgCallback
+  virtual void msgCallback(const zod::Msg*);
+
+  // from cata::ServiceCallback
   virtual void onRspMessage(const std::string& msg);
 
   virtual void onRtnMessage(const std::string& msg);
 
 protected:
-  void go();
-  
-  void queryExchange();
+  void queryExchange(const json::Value&);
 
-  void queryInstrument();
+  void queryInstrument(const json::Value&);
 
   void queryInvestor();
 
@@ -41,11 +45,6 @@ protected:
   void queryTrade();
 
   void queryPosition();
-
-  void sqlString(const std::string& name,
-                 json::Value& data,
-                 std::string& create_sql,
-                 std::string& insert_sql);
 
   void wait(int mill_second = -1) {
     cond_->wait(mill_second);
@@ -62,7 +61,9 @@ protected:
 
   std::unique_ptr<soil::STimer> cond_;
 
-  std::unique_ptr<cppdb::session> db_;
+  std::unique_ptr<zod::PullService> pull_service_;
+
+  std::unique_ptr<zod::PubService> pub_service_;
 };
 
 };  // namespace track

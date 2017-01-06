@@ -1,0 +1,25 @@
+
+// query exchange
+{
+    "queryExchange": {
+       "exchange": ""
+    }
+}
+
+// query product
+{
+    "queryProduct": {
+       "product_id": "",
+       "product_class": ""
+    }
+}
+
+// query instrument
+{
+    "queryInstrument": {
+       "instru": "",
+       "exchange": "",
+       "exchange_instru_id": "",
+       "product_id": ""
+    }
+}

@@ -20,7 +20,9 @@ class Options : public soil::Options {
 
   virtual po::options_description* configOptions();
 
-  std::string connection_string;
+  std::string pull_addr;
+  std::string pub_addr;
+
   std::string log_cfg;
 
  private:
