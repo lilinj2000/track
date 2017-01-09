@@ -127,7 +127,7 @@ AC_SUBST(ZOD_LIBADD)
 AC_OUTPUT([
 	Makefile
 	inf/Makefile
-	service/Makefile])
+	src/Makefile])
 
 
 

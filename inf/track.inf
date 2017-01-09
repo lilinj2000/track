@@ -23,3 +23,53 @@
        "product_id": ""
     }
 }
+
+// query investor
+{
+    "queryInvestor": null
+}
+
+// query account
+{
+    "queryAccount": {
+       "currency" : ""
+    }
+}
+
+// query trading code
+{
+    "queryTradingCode": {
+       "exchange" : "",
+       "client_id" : "",
+       "client_id_type" : "1"
+    }
+}
+
+// query order
+{
+    "queryOrder": {
+       "instru" : "",
+       "exchange" : "",
+       "order_sys_id" : "",
+       "start_time" : "",
+       "stop_time" : ""
+    }
+}
+
+// query trade
+{
+    "queryTrade": {
+       "instru" : "",
+       "exchange" : "",
+       "trade_id" : "",
+       "start_time" : "",
+       "stop_time" : ""
+    }
+}
+
+// query position
+{
+    "queryPosition": {
+       "instru" : ""
+    }
+}

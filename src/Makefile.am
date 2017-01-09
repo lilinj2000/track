@@ -5,7 +5,7 @@ SUBDIRS =
 bin_PROGRAMS = track
 track_SOURCES = \
 	Config.cc \
-	Service.cc \
+	Server.cc \
 	Main.cc 
 
 track_CPPFLAGS = -I$(top_srcdir) \
@@ -30,7 +30,7 @@ track_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 noinst_HEADERS = \
 	Log.hh \
 	Config.hh \
-	Service.hh
+	Server.hh
 
 EXTRA_DIST = env.sh track.cfg log.cfg
 

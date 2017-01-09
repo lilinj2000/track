@@ -81,7 +81,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = track$(EXEEXT)
-subdir = service
+subdir = src
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/depcomp $(noinst_HEADERS)
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -96,7 +96,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(trackdir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_track_OBJECTS = track-Config.$(OBJEXT) track-Service.$(OBJEXT) \
+am_track_OBJECTS = track-Config.$(OBJEXT) track-Server.$(OBJEXT) \
 	track-Main.$(OBJEXT)
 track_OBJECTS = $(am_track_OBJECTS)
 am__DEPENDENCIES_1 =
@@ -388,7 +388,7 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = 
 track_SOURCES = \
 	Config.cc \
-	Service.cc \
+	Server.cc \
 	Main.cc 
 
 track_CPPFLAGS = -I$(top_srcdir) \
@@ -412,7 +412,7 @@ track_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 noinst_HEADERS = \
 	Log.hh \
 	Config.hh \
-	Service.hh
+	Server.hh
 
 EXTRA_DIST = env.sh track.cfg log.cfg
 trackdir = $(bindir)
@@ -430,9 +430,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign service/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign service/Makefile
+	  $(AUTOMAKE) --foreign src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -513,7 +513,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/track-Config.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/track-Main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/track-Service.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/track-Server.Po@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -550,19 +550,19 @@ track-Config.obj: Config.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(track_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o track-Config.obj `if test -f 'Config.cc'; then $(CYGPATH_W) 'Config.cc'; else $(CYGPATH_W) '$(srcdir)/Config.cc'; fi`
 
-track-Service.o: Service.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(track_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT track-Service.o -MD -MP -MF $(DEPDIR)/track-Service.Tpo -c -o track-Service.o `test -f 'Service.cc' || echo '$(srcdir)/'`Service.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/track-Service.Tpo $(DEPDIR)/track-Service.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Service.cc' object='track-Service.o' libtool=no @AMDEPBACKSLASH@
+track-Server.o: Server.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(track_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT track-Server.o -MD -MP -MF $(DEPDIR)/track-Server.Tpo -c -o track-Server.o `test -f 'Server.cc' || echo '$(srcdir)/'`Server.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/track-Server.Tpo $(DEPDIR)/track-Server.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Server.cc' object='track-Server.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(track_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o track-Service.o `test -f 'Service.cc' || echo '$(srcdir)/'`Service.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(track_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o track-Server.o `test -f 'Server.cc' || echo '$(srcdir)/'`Server.cc
 
-track-Service.obj: Service.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(track_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT track-Service.obj -MD -MP -MF $(DEPDIR)/track-Service.Tpo -c -o track-Service.obj `if test -f 'Service.cc'; then $(CYGPATH_W) 'Service.cc'; else $(CYGPATH_W) '$(srcdir)/Service.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/track-Service.Tpo $(DEPDIR)/track-Service.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Service.cc' object='track-Service.obj' libtool=no @AMDEPBACKSLASH@
+track-Server.obj: Server.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(track_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT track-Server.obj -MD -MP -MF $(DEPDIR)/track-Server.Tpo -c -o track-Server.obj `if test -f 'Server.cc'; then $(CYGPATH_W) 'Server.cc'; else $(CYGPATH_W) '$(srcdir)/Server.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/track-Server.Tpo $(DEPDIR)/track-Server.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Server.cc' object='track-Server.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(track_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o track-Service.obj `if test -f 'Service.cc'; then $(CYGPATH_W) 'Service.cc'; else $(CYGPATH_W) '$(srcdir)/Service.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(track_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o track-Server.obj `if test -f 'Server.cc'; then $(CYGPATH_W) 'Server.cc'; else $(CYGPATH_W) '$(srcdir)/Server.cc'; fi`
 
 track-Main.o: Main.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(track_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT track-Main.o -MD -MP -MF $(DEPDIR)/track-Main.Tpo -c -o track-Main.o `test -f 'Main.cc' || echo '$(srcdir)/'`Main.cc

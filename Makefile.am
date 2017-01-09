@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = inf service
+SUBDIRS = inf src
 
 EXTRA_DIST = deploy.sh

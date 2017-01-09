@@ -1,8 +1,8 @@
 // Copyright (c) 2010
 // All rights reserved.
 
-#ifndef TRACK_SERVICE_HH
-#define TRACK_SERVICE_HH
+#ifndef TRACK_SERVER_HH
+#define TRACK_SERVER_HH
 
 #include <string>
 #include "Config.hh"
@@ -14,17 +14,17 @@
 
 namespace track {
 
-class Service : public zod::MsgCallback,
+class Server : public zod::MsgCallback,
                 public cata::ServiceCallback {
  public:
-  Service(int argc, char* argv[]);
+  Server(int argc, char* argv[]);
 
-  virtual ~Service();
+  virtual ~Server();
 
   // from zod::MsgCallback
   virtual void msgCallback(const zod::Msg*);
 
-  // from cata::ServiceCallback
+  // from cata::ServerCallback
   virtual void onRspMessage(const std::string& msg);
 
   virtual void onRtnMessage(const std::string& msg);
@@ -34,17 +34,17 @@ protected:
 
   void queryInstrument(const json::Value&);
 
-  void queryInvestor();
+  void queryInvestor(const json::Value&);
 
-  void queryAccount();
+  void queryAccount(const json::Value&);
 
-  void queryTradingCode();
+  void queryTradingCode(const json::Value&);
 
-  void queryOrder();
+  void queryOrder(const json::Value&);
 
-  void queryTrade();
+  void queryTrade(const json::Value&);
 
-  void queryPosition();
+  void queryPosition(const json::Value&);
 
   void wait(int mill_second = -1) {
     cond_->wait(mill_second);
