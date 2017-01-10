@@ -10,7 +10,7 @@
 {
     "queryProduct": {
        "product_id": "",
-       "product_class": ""
+       "product_class": "1"
     }
 }
 
@@ -71,5 +71,79 @@
 {
     "queryPosition": {
        "instru" : ""
+    }
+}
+
+// query instru margin rate
+{
+    "queryInstruMarginRate": {
+       "instru" : "",
+       "hedge_flag" : "1"
+    }
+}
+
+// query instru commission rate
+{
+    "queryInstruCommissionRate": {
+       "instru" : ""
+    }
+}
+
+// query exchange margin rate
+{
+    "queryExchangeMarginRate": {
+       "instru" : "",
+       "hedge_flag" : "1"
+    }
+}
+
+// query exchange margin rate adjust
+{
+    "queryExchangeMarginRateAdjust": {
+       "instru" : "",
+       "hedge_flag" : "1"
+    }
+}
+
+// query depth market data
+{
+    "queryDepthMarketData": {
+       "instru" : ""
+    }
+}
+
+// order
+{
+    "order": {
+       "direct" : "",
+       "offset_flag" : "",
+       "hedge_flag" : "",
+       "instru" : "",
+       "price" : 10.00,
+       "volume", 20
+    }
+}
+
+// orderFAK
+{
+    "orderFAK": {
+       "direct" : "",
+       "offset_flag" : "",
+       "hedge_flag" : "",
+       "instru" : "",
+       "price" : 10.00,
+       "volume", 20
+    }
+}
+
+// orderFOK
+{
+    "orderFAK": {
+       "direct" : "",
+       "offset_flag" : "",
+       "hedge_flag" : "",
+       "instru" : "",
+       "price" : 10.00,
+       "volume", 20
     }
 }

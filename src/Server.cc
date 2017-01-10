@@ -11,7 +11,7 @@ namespace track {
 Server::Server(int argc, char* argv[]) {
   TRACK_TRACE <<"Server::Server()";
 
-  cond_.reset(soil::STimer::create());
+  registerFuncs();
 
   config_.reset(new Config(argc, argv));
 
@@ -50,32 +50,10 @@ void Server::msgCallback(const zod::Msg* msg) {
   for (auto itr = doc.MemberBegin();
        itr != doc.MemberEnd(); ++ itr) {
     size_t func_hash = str_hash(itr->name.GetString());
-    if (str_hash(itr->name.GetString())
-        == str_hash("queryExchange")) {
-          queryExchange(itr->value);
-    } else if (str_hash(itr->name.GetString())
-               == str_hash("queryProduct")) {
-    } else if (str_hash(itr->name.GetString())
-               == str_hash("queryInstrument")) {
-          queryInstrument(itr->value);
-    } else if (str_hash(itr->name.GetString())
-               == str_hash("queryInvestor")) {
-          queryInvestor(itr->value);
-    } else if (str_hash(itr->name.GetString())
-               == str_hash("queryAccount")) {
-          queryAccount(itr->value);
-    } else if (str_hash(itr->name.GetString())
-               == str_hash("queryTradingCode")) {
-          queryTradingCode(itr->value);
-    } else if (str_hash(itr->name.GetString())
-               == str_hash("queryOrder")) {
-          queryOrder(itr->value);
-    } else if (str_hash(itr->name.GetString())
-               == str_hash("queryTrade")) {
-          queryTrade(itr->value);
-    } else if (str_hash(itr->name.GetString())
-               == str_hash("queryPosition")) {
-          queryPosition(itr->value);
+
+    auto i_itr = funcs_.find(func_hash);
+    if (i_itr != funcs_.end()) {
+      (this->*i_itr->second)(itr->value);
     }
   }
 }
@@ -92,6 +70,8 @@ void Server::onRtnMessage(const std::string& msg) {
   TRACK_TRACE <<"Server::onRtnMessage()";
 
   TRACK_DEBUG <<msg;
+
+  pub_service_->sendMsg(msg);
 }
 
 void Server::queryExchange(const json::Value& value) {
@@ -104,6 +84,29 @@ void Server::queryExchange(const json::Value& value) {
   }
   
   trader_service_->queryExchange(exchange);
+}
+
+void Server::queryProduct(const json::Value& value) {
+  TRACK_TRACE <<"Server::queryProduct()";
+
+  std::string product_id;
+  std::string product_class;
+  std::hash<std::string> str_hash;
+  for (auto itr = value.MemberBegin();
+       itr != value.MemberEnd(); ++ itr) {
+    if (str_hash(itr->name.GetString())
+        == str_hash(std::string("product_id"))) {
+      product_id = itr->value.GetString();
+    } else if (str_hash(itr->name.GetString())
+        == str_hash(std::string("product_class"))) {
+      product_class = itr->value.GetString();
+    }
+  }
+
+  if (!product_class.empty()) {
+    trader_service_->queryProduct(product_id,
+                                  static_cast<cata::ProductClassType>(product_class[0]));
+  }
 }
 
 void Server::queryInstrument(const json::Value& value) {
@@ -261,12 +264,193 @@ void Server::queryPosition(const json::Value& value) {
   TRACK_TRACE <<"Server::queryPosition()";
 
   std::string instru;
-  auto itr = value.FindMember("instru");
-  if (itr != value.MemberEnd()) {
-    instru = itr->value.GetString();
-  }
+  fetchInstruField(value, &instru);
 
   trader_service_->queryPosition(instru);
+}
+
+void Server::queryInstruMarginRate(const json::Value& value) {
+  TRACK_TRACE <<"Server::queryInstruMarginRate()";
+
+  InstruHedgeField req;
+  fetchInstruHedgeField(value, &req);
+
+  trader_service_->queryInstruMarginRate(req.instru, req.hedge_flag);
+}
+
+void Server::queryInstruCommissionRate(const json::Value& value) {
+  TRACK_TRACE <<"Server::queryInstruCommissionRate()";
+
+  std::string instru;
+  fetchInstruField(value, &instru);
+
+  trader_service_->queryInstruCommissionRate(instru);
+}
+
+void Server::queryExchangeMarginRate(const json::Value& value) {
+  TRACK_TRACE <<"Server::queryExchangeMarginRate()";
+
+  InstruHedgeField req;
+  fetchInstruHedgeField(value, &req);
+
+  trader_service_->queryExchangeMarginRate(req.instru, req.hedge_flag);
+}
+
+void Server::queryExchangeMarginRateAdjust(const json::Value& value) {
+  TRACK_TRACE <<"Server::queryExchangeMarginRateAdjust()";
+
+  InstruHedgeField req;
+  fetchInstruHedgeField(value, &req);
+
+  trader_service_->queryExchangeMarginRateAdjust(req.instru, req.hedge_flag);
+}
+
+void Server::queryDepthMarketData(const json::Value& value) {
+  TRACK_TRACE <<"Server::queryDepthMarketData()";
+
+  std::string instru;
+  fetchInstruField(value, &instru);
+
+  trader_service_->queryDepthMarketData(instru);
+}
+
+
+void Server::order(const json::Value& value) {
+  TRACK_TRACE <<"Server::order()";
+
+  ReqOrderField req;
+  fetchReqOrderField(value, &req);
+  
+  trader_service_->order(req.direct, req.offset_flag,
+                         req.hedge_flag, req.instru,
+                         req.price, req.volume);
+}
+
+void Server::orderFAK(const json::Value& value) {
+  TRACK_TRACE <<"Server::orderFAK()";
+
+  ReqOrderField req;
+  fetchReqOrderField(value, &req);
+
+  trader_service_->orderFAK(req.direct, req.offset_flag,
+                            req.hedge_flag, req.instru,
+                            req.price, req.volume);
+}
+
+void Server::orderFOK(const json::Value& value) {
+  TRACK_TRACE <<"Server::orderFOK()";
+
+  ReqOrderField req;
+  fetchReqOrderField(value, &req);
+
+  trader_service_->orderFOK(req.direct, req.offset_flag,
+                            req.hedge_flag, req.instru,
+                            req.price, req.volume);
+}
+
+void Server::registerFuncs() {
+  TRACK_TRACE <<"Server::registerFuncs()";
+
+  std::hash<std::string> str_hash;
+
+  funcs_[str_hash("queryExchange")] = &Server::queryExchange;
+  funcs_[str_hash("queryProduct")] = &Server::queryProduct;
+  funcs_[str_hash("queryInstrument")] = &Server::queryInstrument;
+  funcs_[str_hash("queryInvestor")] = &Server::queryInvestor;
+  funcs_[str_hash("queryAccount")] = &Server::queryAccount;
+  funcs_[str_hash("queryTradingCode")] = &Server::queryTradingCode;
+  funcs_[str_hash("queryOrder")] = &Server::queryOrder;
+  funcs_[str_hash("queryTrade")] = &Server::queryTrade;
+  funcs_[str_hash("queryPosition")] = &Server::queryPosition;
+  funcs_[str_hash("queryInstruMarginRate")] = &Server::queryInstruMarginRate;
+  funcs_[str_hash("queryInstruCommissionRate")] = &Server::queryInstruCommissionRate;
+  funcs_[str_hash("queryExchangeMarginRate")] = &Server::queryExchangeMarginRate;
+  funcs_[str_hash("queryExchangeMarginRateAdjust")] = &Server::queryExchangeMarginRateAdjust;
+  funcs_[str_hash("queryDepthMarketData")] = &Server::queryDepthMarketData;
+
+  funcs_[str_hash("order")] = &Server::order;
+  funcs_[str_hash("orderFAK")] = &Server::orderFAK;
+  funcs_[str_hash("orderFOK")] = &Server::orderFOK;
+}
+
+void Server::fetchInstruField(const json::Value& value, std::string* instru) {
+  TRACK_TRACE <<"Server::fetchInstruField()";
+
+  auto itr = value.FindMember("instru");
+  if (itr != value.MemberEnd()) {
+    *instru = itr->value.GetString();
+  }
+}
+
+void Server::fetchInstruHedgeField(const json::Value& value, InstruHedgeField* req) {
+  TRACK_TRACE <<"Server::fetchInstruHedgeField()";
+
+  std::hash<std::string> str_hash;
+  for (auto itr = value.MemberBegin();
+       itr != value.MemberEnd(); ++ itr) {
+    if (str_hash(itr->name.GetString())
+        == str_hash(std::string("instru"))) {
+      req->instru = itr->value.GetString();
+    } else if (str_hash(itr->name.GetString())
+        == str_hash(std::string("hedge_flag"))) {
+      std::string hedge_flag = itr->value.GetString();
+      if (!hedge_flag.empty()) {
+        req->hedge_flag = static_cast<cata::HedgeFlagType>(hedge_flag[0]);
+      } else {
+        throw std::runtime_error("invalid hedge_flag.");
+      }
+    }
+  }
+}
+
+void Server::fetchReqOrderField(const json::Value& value,
+                                ReqOrderField* req) {
+  TRACK_TRACE <<"Server::fetchReqOrderField()";
+
+  req->price = 0;
+  req->volume = 0;
+  
+  std::hash<std::string> str_hash;
+  for (auto itr = value.MemberBegin();
+       itr != value.MemberEnd(); ++ itr) {
+    if (str_hash(itr->name.GetString())
+        == str_hash(std::string("direct"))) {
+      std::string direct = itr->value.GetString();
+
+      if (!direct.empty()) {
+        req->direct = static_cast<cata::DirectionType>(direct[0]);
+      } else {
+        throw std::runtime_error("invalid direct.");
+      }
+    } else if (str_hash(itr->name.GetString())
+        == str_hash(std::string("offset_flag"))) {
+      std::string offset_flag = itr->value.GetString();
+
+      if (!offset_flag.empty()) {
+        req->offset_flag = static_cast<cata::OffsetFlagType>(offset_flag[0]);
+      } else {
+        throw std::runtime_error("invalid offsete_flag.");
+      }
+    } else if (str_hash(itr->name.GetString())
+        == str_hash(std::string("hedge_flag"))) {
+      std::string hedge_flag = itr->value.GetString();
+
+      if (!hedge_flag.empty()) {
+        req->hedge_flag = static_cast<cata::HedgeFlagType>(hedge_flag[0]);
+      } else {
+        throw std::runtime_error("invalid hedge_flag.");
+      }
+    } else if (str_hash(itr->name.GetString())
+        == str_hash(std::string("instru"))) {
+      req->instru = itr->value.GetString();
+    } else if (str_hash(itr->name.GetString())
+        == str_hash(std::string("price"))) {
+      req->price = itr->value.GetDouble();
+    } else if (str_hash(itr->name.GetString())
+        == str_hash(std::string("volume"))) {
+      req->volume = itr->value.GetInt();
+    } 
+  }
 }
 
 };  // namespace track
